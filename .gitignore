@@ -1,0 +1,10 @@
+# virtual enviroment
+.venv
+venv
+
+# additinoal files
+tasks.docx
+
+# temporary files/cache
+*.pyc
+*.pyx
