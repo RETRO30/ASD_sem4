@@ -14,34 +14,34 @@ def generate_triangles(points: list[Point]) -> list[Triangle]:
     return triangles
 
 
-def visualize(
-    points: list[Point], nested_triangles: list[tuple[Triangle, Triangle]]
-) -> None:
-    import matplotlib.pyplot as plt
+# def visualize(
+#     points: list[Point], nested_triangles: list[tuple[Triangle, Triangle]]
+# ) -> None:
+#     import matplotlib.pyplot as plt
 
-    plt.figure(figsize=(8, 8))
-    plt.scatter(
-        [p.x for p in points],
-        [p.y for p in points],
-        color='blue',
-        label='Points',
-    )
+#     plt.figure(figsize=(8, 8))
+#     plt.scatter(
+#         [p.x for p in points],
+#         [p.y for p in points],
+#         color='blue',
+#         label='Points',
+#     )
 
-    for outer, inner in nested_triangles:
-        outer_x = [p.x for p in outer.points] + [outer.points[0].x]
-        outer_y = [p.y for p in outer.points] + [outer.points[0].y]
-        inner_x = [p.x for p in inner.points] + [inner.points[0].x]
-        inner_y = [p.y for p in inner.points] + [inner.points[0].y]
+#     for outer, inner in nested_triangles:
+#         outer_x = [p.x for p in outer.points] + [outer.points[0].x]
+#         outer_y = [p.y for p in outer.points] + [outer.points[0].y]
+#         inner_x = [p.x for p in inner.points] + [inner.points[0].x]
+#         inner_y = [p.y for p in inner.points] + [inner.points[0].y]
 
-        plt.plot(outer_x, outer_y, color='red', label='Outer Triangle')
-        plt.plot(inner_x, inner_y, color='green', label='Inner Triangle')
+#         plt.plot(outer_x, outer_y, color='red', label='Outer Triangle')
+#         plt.plot(inner_x, inner_y, color='green', label='Inner Triangle')
 
-    plt.legend()
-    plt.title('Nested Triangles Visualization')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
-    plt.grid()
-    plt.show()
+#     plt.legend()
+#     plt.title('Nested Triangles Visualization')
+#     plt.xlabel('X-axis')
+#     plt.ylabel('Y-axis')
+#     plt.grid()
+#     plt.show()
 
 
 if __name__ == '__main__':
@@ -64,4 +64,4 @@ if __name__ == '__main__':
 
     print(f'Found {len(nested_triangles)} nested triangle pairs')
 
-    visualize(points, nested_triangles)
+    # visualize(points, nested_triangles)

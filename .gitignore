@@ -8,3 +8,4 @@ tasks.docx
 # temporary files/cache
 *.pyc
 *.pyx
+.mypy_cache
