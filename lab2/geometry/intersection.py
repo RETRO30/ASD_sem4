@@ -3,8 +3,24 @@ from typing import Optional
 
 
 class Intersection:
+    """Алгоритмы пересечения базовых геометрических объектов.
+
+    Теоретические основы:
+    - Прямая-прямая: решение системы линейных уравнений через определитель.
+    - Прямая-окружность: подстановка параметрического уравнения прямой в
+      уравнение окружности с последующим решением квадратного уравнения.
+    - Окружность-окружность: геометрическое построение по расстоянию между
+      центрами и теореме Пифагора.
+    """
+
     @staticmethod
     def line_to_line(a: Line, b: Line) -> Optional[Point | Line]:
+        """Ищет пересечение двух прямых/отрезков.
+
+        Если определитель равен нулю, направления параллельны.
+        При дополнительной коллинеарности возвращается общая линия,
+        иначе пересечения нет.
+        """
         d1: Vector = a.get_vector()
         d2: Vector = b.get_vector()
         d3: Vector = Line(a.p1, b.p1).get_vector()
@@ -30,6 +46,13 @@ class Intersection:
 
     @staticmethod
     def line_to_circle(line: Line, circle: Circle) -> Optional[list[Point]]:
+        """Ищет точки пересечения прямой (или отрезка) с окружностью.
+
+        Число решений определяется дискриминантом квадратного уравнения:
+        - `< 0`: пересечений нет,
+        - `= 0`: касание,
+        - `> 0`: две точки.
+        """
         # Vector from circle center to line start point
         to_p1 = Vector(
             line.p1.x - circle.center.x, line.p1.y - circle.center.y
@@ -62,6 +85,16 @@ class Intersection:
 
     @staticmethod
     def circle_to_cirlce(a: Circle, b: Circle) -> Optional[list[Point]]:
+        """Находит пересечение двух окружностей.
+
+        Теория:
+        - Если расстояние между центрами больше суммы радиусов, окружности
+          не пересекаются.
+        - Если расстояние меньше модуля разности радиусов, одна окружность
+          лежит внутри другой без пересечения.
+        - При нулевом расстоянии и равных радиусах окружности совпадают,
+          множество точек пересечения бесконечно.
+        """
         d = a.center.distance_sq(b.center) ** 0.5
         if d > a.radius + b.radius or d < abs(a.radius - b.radius):
             return None
@@ -93,6 +126,7 @@ class Intersection:
     def triangle_to_triangle(
         a: Triangle, b: Triangle
     ) -> Optional[list[Point]]:
+        """Собирает все точки пересечения сторон двух треугольников."""
         points = set()
 
         for line_a in a.get_edges():

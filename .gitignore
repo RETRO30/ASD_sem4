@@ -9,3 +9,4 @@ tasks.docx
 *.pyc
 *.pyx
 .mypy_cache
+__pycache__

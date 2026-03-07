@@ -1,7 +1,6 @@
 def build_bad_char_table(pattern, alphabet):
     """Построение таблицы стоп-символов (последнее вхождение символа в образец)."""
     table = {}
-    m = len(pattern)
     for c in alphabet:
         table[c] = -1
     for i, c in enumerate(pattern):
@@ -16,6 +15,7 @@ def search(text, pattern):
     # Для алфавита используем множество символов текста и образца
     alphabet = set(text) | set(pattern)
     bad_char = build_bad_char_table(pattern, alphabet)
+    print(bad_char)
     
     positions = []
     i = 0

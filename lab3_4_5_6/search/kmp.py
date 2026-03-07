@@ -17,6 +17,7 @@ def search(text, pattern):
         return []
     n, m = len(text), len(pattern)
     pi = compute_prefix_function(pattern)
+    print(pi)
     q = 0  # количество символов, совпавших в текущем окне
     positions = []
     for i in range(n):
