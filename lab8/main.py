@@ -8,9 +8,9 @@ def count_change_ways(amount: int, coins: Sequence[int]) -> int:
     (порядок монет не важен).
 
     Идея:
-    - `dp[s]` хранит число способов набрать сумму `s`.
-    - База: `dp[0] = 1` (один способ набрать ноль — взять ни одной монеты).
-    - Для каждого номинала `c` обновляем `dp[s] += dp[s - c]` для `s >= c`.
+    - `ways[s]` хранит число способов набрать сумму `s`.
+    - База: `ways[0] = 1` (один способ набрать ноль — взять ни одной монеты).
+    - Для каждого номинала `c` обновляем `ways[s] = ways[s] + ways[s - c]` для `s >= c`.
 
     Args:
         amount: Целевая сумма (целое неотрицательное число).
@@ -30,19 +30,21 @@ def count_change_ways(amount: int, coins: Sequence[int]) -> int:
 
     unique_coins = sorted(set(coins))
 
-    dp = [0] * (amount + 1)
-    dp[0] = 1
+    ways = [0] * (amount + 1)
+    ways[0] = 1
 
     for coin in unique_coins:
-        for current_sum in range(coin, amount + 1):
-            dp[current_sum] += dp[current_sum - coin]
+        for target in range(coin, amount + 1):
+            ways[target] = ways[target] + ways[target - coin]
+        print(ways)
+        
 
-    return dp[amount]
+    return ways[amount]
 
 
 def main() -> None:
     """Демонстрация задачи размена монет."""
-    amount = 10
+    amount = 5
     coins = [1, 2, 5]
 
     ways = count_change_ways(amount, coins)
