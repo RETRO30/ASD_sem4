@@ -1,92 +1,72 @@
-from typing import Sequence
+from typing import List, Optional
 
 
-def color_graph(adjacency: Sequence[Sequence[int]]) -> tuple[int, list[int]]:
-    """Решает задачу о раскраске графа.
-
-    Теория:
-    - Нужно назначить каждой вершине цвет так, чтобы соседние вершины
-      имели разные цвета.
-    - Целью является минимизация числа используемых цветов.
-    - В данной реализации используется поиск с возвратом (backtracking),
-      который перебирает допустимые раскраски с отсечениями.
-
-    Args:
-        adjacency: Квадратная матрица смежности графа.
-
-    Returns:
-        Кортеж `(chromatic_number, colors)`, где:
-        - `chromatic_number` — минимальное число цветов,
-        - `colors` — список цветов для вершин, начиная с 0.
-
-    Raises:
-        ValueError: Если матрица смежности пуста или не квадратная.
+def is_safe(vertex: int, color: int, colors: List[int], graph: List[List[int]]) -> bool:
     """
-    n = len(adjacency)
-    if n == 0:
-        raise ValueError("Матрица смежности не должна быть пустой")
-    if any(len(row) != n for row in adjacency):
-        raise ValueError("Матрица смежности должна быть квадратной")
-
-    degrees = [sum(row) for row in adjacency]
-    order = sorted(range(n), key=lambda v: degrees[v], reverse=True)
-
-    best_count = n + 1
-    best_colors = [-1] * n
-    current_colors = [-1] * n
-
-    def is_valid(vertex: int, color: int) -> bool:
-        for neighbor in range(n):
-            if adjacency[vertex][neighbor] and current_colors[neighbor] == color:
-                return False
-        return True
-
-    def backtrack(position: int, used_colors: int) -> None:
-        nonlocal best_count, best_colors
-
-        if used_colors >= best_count:
-            return
-
-        if position == n:
-            best_count = used_colors
-            best_colors = current_colors[:]
-            return
-
-        vertex = order[position]
-
-        for color in range(used_colors):
-            if is_valid(vertex, color):
-                current_colors[vertex] = color
-                backtrack(position + 1, used_colors)
-                current_colors[vertex] = -1
-
-        current_colors[vertex] = used_colors
-        backtrack(position + 1, used_colors + 1)
-        current_colors[vertex] = -1
-
-    backtrack(0, 0)
-    return best_count, best_colors
+    Проверяет, можно ли покрасить вершину vertex в цвет color.
+    
+    graph — матрица смежности:
+    graph[u][v] == 1, если есть ребро между u и v.
+    colors[i] == 0 означает, что вершина i ещё не покрашена.
+    """
+    n = len(graph)
+    for neighbor in range(n):
+        if graph[vertex][neighbor] == 1 and colors[neighbor] == color:
+            return False
+    return True
 
 
-def main() -> None:
-    """Демонстрация задачи о раскраске графа."""
-    adjacency = [
-        [0, 1, 1, 1, 0],
-        [1, 0, 1, 0, 0],
-        [1, 1, 0, 1, 1],
-        [1, 0, 1, 0, 1],
-        [0, 0, 1, 1, 0],
-    ]
+def color_graph_backtracking(
+    graph: List[List[int]],
+    k: int,
+    vertex: int = 0,
+    colors: Optional[List[int]] = None
+) -> Optional[List[int]]:
+    """
+    Пытается раскрасить граф в k цветов.
+    
+    Возвращает список цветов для вершин, если раскраска существует,
+    иначе None.
+    """
+    n = len(graph)
 
-    chromatic_number, colors = color_graph(adjacency)
+    if colors is None:
+        colors = [0] * n
 
-    print("Матрица смежности:")
-    for row in adjacency:
-        print(row)
+    # База рекурсии: все вершины покрашены
+    if vertex == n:
+        return colors.copy()
 
-    print(f"Минимальное число цветов: {chromatic_number}")
-    print(f"Раскраска вершин: {colors}")
+    # Пробуем все цвета от 1 до k
+    for color in range(1, k + 1):
+        if is_safe(vertex, color, colors, graph):
+            colors[vertex] = color
+
+            result = color_graph_backtracking(graph, k, vertex + 1, colors)
+            if result is not None:
+                return result
+
+            # Откат
+            colors[vertex] = 0
+
+    return None
 
 
 if __name__ == "__main__":
-    main()
+    # Пример графа из 4 вершин
+    graph = [
+        [0, 1, 1, 1],
+        [1, 0, 1, 0],
+        [1, 1, 0, 1],
+        [1, 0, 1, 0]
+    ]
+
+    k = 4  # Количество цветов для раскраски
+    coloring = color_graph_backtracking(graph, k)
+
+    if coloring is None:
+        print(f"Граф нельзя раскрасить в {k} цветов")
+    else:
+        print(f"Раскраска в {k} цветов найдена:")
+        for v, c in enumerate(coloring):
+            print(f"Вершина {v} -> цвет {c}")

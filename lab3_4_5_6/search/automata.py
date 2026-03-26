@@ -33,6 +33,9 @@ def search(text, pattern, alphabet):
     if not pattern:
         return []
     transition = build_automaton(pattern, alphabet)
+    for trans in transition:
+        print(trans)
+    # print(transition)
     state = 0
     positions = []
     for i, char in enumerate(text):

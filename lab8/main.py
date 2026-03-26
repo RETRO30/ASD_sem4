@@ -36,7 +36,7 @@ def count_change_ways(amount: int, coins: Sequence[int]) -> int:
     for coin in unique_coins:
         for target in range(coin, amount + 1):
             ways[target] = ways[target] + ways[target - coin]
-        print(ways)
+            print(ways)
         
 
     return ways[amount]

@@ -11,7 +11,7 @@ def read_text_from_file(filename):
 
 def main():
     filename = "text.txt"
-    pattern = "ada"
+    pattern = "ababd"
 
     try:
         text = read_text_from_file(filename)
@@ -27,14 +27,14 @@ def main():
     auto_pos = automata.search(text, pattern, alphabet)
     print(f"Автоматный поиск: {auto_pos}")
 
-    kmp_pos = kmp.search(text, pattern)
-    print(f"КМП: {kmp_pos}")
+    # kmp_pos = kmp.search(text, pattern)
+    # print(f"КМП: {kmp_pos}")
 
-    bm_pos = boyer_mur.search(text, pattern)
-    print(f"Бойер-Мур: {bm_pos}")
+    # bm_pos = boyer_mur.search(text, pattern)
+    # print(f"Бойер-Мур: {bm_pos}")
 
-    rk_pos = rabin_karp.search(text, pattern)
-    print(f"Рабин-Карп: {rk_pos}")
+    # rk_pos = rabin_karp.search(text, pattern)
+    # print(f"Рабин-Карп: {rk_pos}")
 
 if __name__ == "__main__":
     main()
